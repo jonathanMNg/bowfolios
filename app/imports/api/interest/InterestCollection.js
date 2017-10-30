@@ -18,8 +18,13 @@ class InterestCollection extends BaseCollection {
    */
   constructor() {
     super('Interest', new SimpleSchema({
-      name: { type: String },
-      description: { type: String, optional: true },
+      name: {
+        type: String,
+      },
+      description: {
+        type: String,
+        optional: true,
+      },
     }, { tracker: Tracker }));
   }
 

@@ -24,6 +24,7 @@ class ProfileCollection extends BaseCollection {
       firstName: { type: String, optional: true },
       lastName: { type: String, optional: true },
       bio: { type: String, optional: true },
+      location: { type: String, optional: true },
       interests: { type: Array, optional: true },
       'interests.$': { type: String },
       title: { type: String, optional: true },
@@ -41,6 +42,7 @@ class ProfileCollection extends BaseCollection {
    *                   lastName: 'Johnson',
    *                   username: 'johnson',
    *                   bio: 'I have been a professor of computer science at UH since 1990.',
+   *                   location: 'Honolulu, Hawaii.',
    *                   interests: ['Application Development', 'Software Engineering', 'Databases'],
    *                   title: 'Professor of Information and Computer Sciences',
    *                   picture: 'http://philipmjohnson.org/headshot.jpg',
@@ -55,12 +57,13 @@ class ProfileCollection extends BaseCollection {
    * if one or more interests are not defined, or if github, facebook, and instagram are not URLs.
    * @returns The newly created docID.
    */
-  define({ firstName = '', lastName = '', username, bio = '', interests = [], picture = '', title = '', github = '',
+  define({ firstName = '', lastName = '', username, bio = '', location = '', interests = [], picture = '', title = '',
+           github = '',
       facebook = '', instagram = '' }) {
     // make sure required fields are OK.
-    const checkPattern = { firstName: String, lastName: String, username: String, bio: String, picture: String,
-      title: String };
-    check({ firstName, lastName, username, bio, picture, title }, checkPattern);
+    const checkPattern = { firstName: String, lastName: String, username: String, bio: String, location: String,
+      picture: String, title: String };
+    check({ firstName, lastName, username, bio, location, picture, title }, checkPattern);
 
     if (this.find({ username }).count() > 0) {
       throw new Meteor.Error(`${username} is previously defined in another Profile`);
@@ -74,7 +77,7 @@ class ProfileCollection extends BaseCollection {
       throw new Meteor.Error(`${interests} contains duplicates`);
     }
 
-    return this._collection.insert({ firstName, lastName, username, bio, interests, picture, title, github,
+    return this._collection.insert({ firstName, lastName, username, bio, location, interests, picture, title, github,
       facebook, instagram });
   }
 
@@ -89,13 +92,14 @@ class ProfileCollection extends BaseCollection {
     const lastName = doc.lastName;
     const username = doc.username;
     const bio = doc.bio;
+    const location = doc.location;
     const interests = doc.interests;
     const picture = doc.picture;
     const title = doc.title;
     const github = doc.github;
     const facebook = doc.facebook;
     const instagram = doc.instagram;
-    return { firstName, lastName, username, bio, interests, picture, title, github, facebook, instagram };
+    return { firstName, lastName, username, bio, location, interests, picture, title, github, facebook, instagram };
   }
 }
 
